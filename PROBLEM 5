@@ -1,0 +1,92 @@
+import math 
+import sys 
+  
+ 
+def v2(x): 
+     
+    if x == 0: 
+        return 0, 0  
+     
+    cnt = 0 
+    while x > 0 and x % 2 == 0: 
+        x //= 2 
+        cnt += 1 
+     
+    return cnt, x 
+ 
+def ceil_log2(x): 
+     
+    if x <= 1: 
+        return 0 
+    return x.bit_length() - 1 + (x != (1 << (x.bit_length() - 1))) 
+ 
+ 
+def solve(): 
+     
+    try: 
+         
+        line1 = sys.stdin.readline().split() 
+        if not line1: 
+            return 
+        r_num, r_den = map(int, line1) 
+         
+         
+        line2 = sys.stdin.readline().split() 
+        if not line2: 
+            return 
+        R_num, R_den, h_num, h_den = map(int, line2) 
+    except EOFError: 
+        return 
+    except Exception: 
+     
+        return 
+ 
+ 
+     
+    N = 2 * (r_num**3) * (R_den**2) * h_den 
+    D = 3 * (r_den**3) * (R_num**2) * h_num 
+     
+     
+    g = math.gcd(N, D) 
+    N_prime = N // g 
+    D_prime = D // g 
+ 
+ 
+    p2_N, N_odd = v2(N_prime) 
+    p2_D, D_odd = v2(D_prime) 
+ 
+     
+    Delta = p2_N - p2_D 
+ 
+     
+    c_a = ceil_log2(D_odd)  
+    c_b = ceil_log2(N_odd)  
+ 
+    min_cuts = 0 
+     
+    if Delta >= 0: 
+         
+        k_S_min = max(c_b, c_a - Delta) 
+        k_C_min = k_S_min + Delta 
+        min_cuts = k_C_min + k_S_min 
+    else:  
+         
+        k_C_min = max(c_a, c_b + Delta) 
+        k_S_min = k_C_min - Delta 
+        min_cuts = k_C_min + k_S_min 
+         
+    print(min_cuts) 
+ 
+ 
+try: 
+    t_line = sys.stdin.readline() 
+    if t_line: 
+        t = int(t_line) 
+        for _ in range(t): 
+            solve() 
+except EOFError: 
+     
+    pass 
+except Exception: 
+     
+    pass
